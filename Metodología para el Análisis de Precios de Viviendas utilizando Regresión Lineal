@@ -1,0 +1,34 @@
+
+1. Definición del problema:
+   - Comprende claramente el objetivo del proyecto: predecir los precios de viviendas basados en características específicas.
+
+2. Recopilación y exploración de datos:
+   - Adquiere un conjunto de datos relevante que contenga información sobre propiedades y sus precios.
+   - Realiza un análisis exploratorio para comprender las variables, detectar valores atípicos y evaluar la calidad de los datos.
+
+3. Preprocesamiento de datos:
+   - Limpia los datos, tratando valores faltantes, duplicados y outliers.
+   - Selecciona las características más relevantes para el análisis.
+
+4. División de datos:
+   - Divide los datos en conjuntos de entrenamiento y prueba para evaluar el rendimiento del modelo.
+
+5. Modelado inicial:
+   - Implementa un modelo de regresión lineal simple
+   - Entrena el modelo con los datos de entrenamiento.
+
+6. Evaluación inicial:
+   - Evalúa el rendimiento del modelo utilizando métricas como el error cuadrático medio (MSE) en los datos de prueba.
+   - Visualiza los resultados mediante gráficos de dispersión y de regresión.
+7. Refinamiento del modelo:
+   - Identifica variables que puedan afectar significativamente los precios de viviendas y realiza transformaciones si es necesario.
+   - Considera agregar características polinómicas o realizar selección de características para mejorar el rendimiento.
+
+8. Interpretación de resultados:
+   - Interpreta los coeficientes del modelo para entender cómo las características influyen en los precios.
+   - Comunica las conclusiones de manera clara en un informe o presentación.
+
+9. Documentación y presentación:
+    - Documenta todos los pasos del proceso, desde la limpieza de datos hasta la elección del modelo final.
+    - Prepara un informe o presentación que resuma el análisis, los resultados y las recomendaciones.
+

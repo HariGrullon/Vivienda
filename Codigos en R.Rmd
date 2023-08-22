@@ -1,0 +1,174 @@
+---
+title: "Asignación 1"
+author: "Hari Grullon y Nerfi Pérez"
+date: "2023-08-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r paquetes, message=FALSE, warning=FALSE}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(Lock5Data)
+library(GGally)
+library(Hmisc)
+library(corrplot)
+library(PerformanceAnalytics)
+library(rmarkdown)
+```
+
+```{r data}
+#carga de datos
+viviendas <- read_excel("C:/Users/HP/OneDrive/Escritorio/viviendas.xlsx")
+```
+
+```{r exploración}
+#exploración de los datos
+
+summary(viviendas)
+
+head(viviendas)
+
+str(viviendas)
+```
+
+```{r visualización}
+par(mfrow = c(3, 3))
+
+# Histograma de las variables
+hist(viviendas$edad_media_vivienda,col="deepskyblue", main= "Histograma edad media de la vivienda", ylab = "Frecuecia")
+hist(viviendas$total_habitaciones,col="deepskyblue", main = "Histograma total de habitaciones", ylab = "Frecuecia")
+hist(viviendas$total_dormitorios,col="deepskyblue", main="Histograma total de dormitorios", ylab = "Frecuecia")
+hist(viviendas$población, col="deepskyblue", main ="Histograma de población", ylab = "Frecuecia")
+hist(viviendas$hogares, col="deepskyblue", main = "Histograma de hogares", ylab = "Frecuecia")
+hist(viviendas$ingreso_medio,col="deepskyblue", main ="Histograma de ingreso medio", ylab = "Frecuecia")
+hist(viviendas$valor_medio_de_la_casa,col="deepskyblue",main="Histograma valor medio de la casa", ylab = "Frecuecia")
+
+```
+```{r message=FALSE, warning=FALSE}
+attach(viviendas)
+plot(longitud,latitud,pch=19,col="red")
+```
+```{r boxplot}
+par(mfrow = c(2, 5))
+
+boxplot(viviendas$longitud)
+boxplot(viviendas$latitud)
+boxplot(viviendas$edad_media_vivienda)
+boxplot(viviendas$total_habitaciones)
+boxplot(viviendas$total_dormitorios)
+boxplot(viviendas$población)
+boxplot(viviendas$hogares)
+boxplot(viviendas$ingreso_medio)
+boxplot(viviendas$valor_medio_de_la_casa)
+```
+
+
+```{r correlación, message=FALSE, warning=FALSE}
+
+#correlación
+viviendas2 <- viviendas[, -which(names(viviendas) == 'proximidad_oceano')]
+
+cor_matrix <- cor(viviendas2)
+corrplot(cor_matrix, method = "color")
+
+chart.Correlation(viviendas2, histogram = F, pch = 10)
+
+```
+
+```{r pairs, message=FALSE, warning=FALSE}
+pairs( ~ valor_medio_de_la_casa + ingreso_medio + total_habitaciones + edad_media_vivienda , datos = viviendas2 ) 
+```
+
+
+```{r dividir datos}
+#entrenamiento y prueba
+
+# Definir la proporción para la división (por ejemplo, 70% para entrenamiento y 30% para prueba)
+p_entrenamiento <- 0.7
+
+# Generar índices aleatorios para seleccionar filas para el conjunto de entrenamiento
+entrenamiento <- sample(1:nrow(viviendas), nrow(viviendas) * p_entrenamiento)
+
+# Crear los conjuntos de entrenamiento y prueba
+Entrenamiento <- viviendas[entrenamiento, ]
+Prueba <- viviendas[-entrenamiento, ]
+
+```
+
+```{r modelo}
+#modelo de regresión lineal
+
+modelo <- lm(valor_medio_de_la_casa ~ ingreso_medio + edad_media_vivienda, data = Entrenamiento)
+
+```
+
+```{r evaluacion del modelo}
+#evaluación del modelo
+
+# Calcular las predicciones del modelo en el conjunto de prueba
+predicciones <- predict(modelo, newdata = Prueba)
+
+# Calcular el error cuadrático medio (MSE)
+mse <- mean((predicciones - Prueba$valor_medio_de_la_casa)^2)
+cat("Error Cuadrático Medio (MSE):", mse, "\n")
+
+# Calcular el coeficiente de determinación (R^2)
+r2 <- 1 - (sum((Prueba$valor_medio_de_la_casa - predicciones)^2) / sum((Prueba$valor_medio_de_la_casa - mean(Prueba$valor_medio_de_la_casa))^2))
+cat("Coeficiente de Determinación (R^2):", r2, "\n")
+
+```
+```{r visualización de resultados}
+#visualización de resultados
+
+#gráfico de dispersión con línea de regresión
+
+ggplot(data = Prueba, aes(x = proximidad_oceano, y = valor_medio_de_la_casa)) +
+  geom_point() +                        
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +  
+  labs(title = "Gráfico de Dispersión y Línea de Regresión",
+       x = "proximidad_oceano",
+       y = "valor_medio_de_la_casa")
+
+ggplot(data = Prueba, aes(x = ingreso_medio, y = valor_medio_de_la_casa)) +
+  geom_point() +                        
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +  
+  labs(title = "Gráfico de Dispersión y Línea de Regresión",
+       x = "ingreso_medio",
+       y = "valor_medio_de_la_casa")
+```
+```{r interpretación de coeficientes}
+#interpretación de coeficientes
+
+coeficientes <- coef(modelo)
+
+# Imprimir los coeficientes del modelo
+print(coeficientes)
+
+```
+```{r predicción de precios}
+#predicción de precios
+
+predicciones <- predict(modelo, newdata = Prueba)
+
+# Imprimir las predicciones
+
+head(predicciones, 100)
+
+# Crear un nuevo dataframe con características, valores reales y predicciones
+resultados <- data.frame(edad_media_vivienda = Prueba$edad_media_vivienda,
+                          Precio_Real = Prueba$valor_medio_de_la_casa,
+                          Prediccion = predicciones)
+
+# Imprimir el dataframe de resultados
+
+head(resultados, 50)
+
+```
+
+
+

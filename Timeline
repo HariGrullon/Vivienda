@@ -1,0 +1,24 @@
+Proyecto de análisis de precios de viviendas utilizando regresión lineal en un período de 4 semanas
+
+
+Semana 1: Definición y preparación de datos.
+- Definir claramente el objetivo del proyecto y el conjunto de datos a utilizar.
+- Descargar o recopilar el conjunto de datos y familiarizarse con sus variables.
+- Realizar una limpieza básica de datos, como manejar valores faltantes y eliminar duplicados.
+
+Semana 2: Análisis exploratorio y preparación de datos.
+- Realizar un análisis exploratorio rápido para entender la distribución de las variables y las relaciones.
+- Seleccionar las variables más relevantes para el análisis de precios de viviendas.
+- Realizar transformaciones simples si es necesario, como normalización de datos.
+
+Semana 3: Modelado y evaluación inicial.
+- Dividir el conjunto de datos en datos de entrenamiento y de prueba.
+- Implementar y entrenar un modelo de regresión lineal básico utilizando bibliotecas como scikit-learn.
+- Evaluar el rendimiento del modelo utilizando métricas simples como el error cuadrático medio (MSE).
+
+Semana 4: Refinamiento y presentación de resultados.
+- Realizar ajustes al modelo, como agregar características polinómicas o manejar multicolinealidad si es necesario.
+- Evaluar el modelo refinado utilizando datos de prueba y métricas adicionales.
+- Preparar un informe que resuma los resultados, presentando visualizaciones y conclusiones.
+
+
